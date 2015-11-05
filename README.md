@@ -36,7 +36,7 @@ Configure input plugin to fetch fluentd events from another fluentd nodes.
 
 ```apache
 <source>
-  type pull_forward
+  type pull_forward_insecure
   
   fetch_interval 10s
   timeout 10s
@@ -48,7 +48,7 @@ PullForwardInput can fetch events from many nodes of `<server>`.
 
 ### HTTP fetch
 
-We can fluentd events from PullForwardOutput by normal HTTPS.
+We can fluentd events from PullForwardOutput by normal HTTP.
 
 ```
 $ curl http://localhost:24280/
