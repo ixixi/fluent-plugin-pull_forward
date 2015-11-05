@@ -2,9 +2,7 @@ module Fluent
   class PullForwardInput < Input
     DEFAULT_PULLFORWARD_LISTEN_PORT = 24280
 
-    Fluent::Plugin.register_input('pull_forward', self)
-
-    config_param :allow_self_signed_certificate, :bool, :default => true
+    Fluent::Plugin.register_input('pull_forward_insecure', self)
 
     config_param :fetch_interval, :time, :default => 600 # 10m
     config_param :timeout, :time, :default => 60
@@ -12,8 +10,6 @@ module Fluent
     config_section :server, param_name: :servers do
       config_param :host, :string
       config_param :port, :integer, :default => DEFAULT_PULLFORWARD_LISTEN_PORT
-      config_param :username, :string
-      config_param :password, :string
     end
 
     attr_reader :hostname_resolver
@@ -22,8 +18,6 @@ module Fluent
       super
       require 'resolve/hostname'
       require 'net/http'
-      require 'net/https'
-      require 'openssl'
       require 'yajl'
     end
 
@@ -34,12 +28,6 @@ module Fluent
 
     def configure(conf)
       super
-
-      @verify_mode = if @allow_self_signed_certificate
-                       OpenSSL::SSL::VERIFY_NONE
-                     else
-                       OpenSSL::SSL::VERIFY_PEER
-                     end
       @resolver = Resolve::Hostname.new(:system_resolver => true)
     end
 
@@ -76,16 +64,13 @@ module Fluent
 
       begin
         address = @resolver.getaddress(server.host)
-        https = Net::HTTP.new(address, server.port)
-        https.open_timeout = @timeout
-        https.read_timeout = @timeout
-        https.use_ssl = true
-        https.verify_mode = @verify_mode
+        http = Net::HTTP.new(address, server.port)
+        http.open_timeout = @timeout
+        http.read_timeout = @timeout
 
         req = Net::HTTP::Get.new('/')
-        req.basic_auth server.username, server.password
 
-        res = https.start{ https.request(req) }
+        res = http.start{ http.request(req) }
         if res && res.is_a?(Net::HTTPSuccess)
           body = res.body
         else
