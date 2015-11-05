@@ -40,7 +40,6 @@ Configure input plugin to fetch fluentd events from another fluentd nodes.
   
   fetch_interval 10s
   timeout 10s
-  
 </source>
 ```
 
