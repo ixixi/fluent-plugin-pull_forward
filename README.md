@@ -6,8 +6,6 @@ We can do with pull_forward:
 * transfer data into hosts in firewall by pulling
 * fetch Fluentd events as JSON by HTTP from any processes
 
-![plugin image](https://raw.githubusercontent.com/tagomoris/fluent-plugin-pull_forward/master/misc/plugin_image.png)
-
 ## Configuration
 
 ### PullForwardOutput
