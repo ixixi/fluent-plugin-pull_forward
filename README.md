@@ -26,7 +26,7 @@ Configure output plugin to transfer fluentd events to another fluentd nodes.
 </match>
 ```
 
-PullForwardOutput uses PullPoolBuffer plugin. **DO NOT MODIFY buffer_type**. It uses buffer file, so `buffer_path` is required, and Not so short values are welcome for `flush_interval` because PullPoolBuffer make a file per flushes (and these are not removed until fetches of cluent/in\_pull\_forward).
+PullForwardOutput uses PullPoolBuffer plugin. **DO NOT MODIFY buffer_type**. It uses buffer file, so `buffer_path` is required, and Not so short values are welcome for `flush_interval` because PullPoolBuffer make a file per flushes (and these are not removed until fetches of cluent/in\_pull\_forward\_insecure).
 
 ### PullForwardInput
 
